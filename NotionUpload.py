@@ -1,77 +1,43 @@
+from ClippingsParser import main
 import requests
 
 TOKEN = 'secret_GbMfRy93ceKE02ZMlKkVeIfefiSlJDaP1pGq8Ie3Wgt'
 
 
-def upload():
-    r = requests.request(
-        "GET",
-        "https://api.notion.com/v1/pages/a11adda67f1e48fc9c0179a44841b8bf",  # 字符串为页面id
-        headers={"Authorization": "Bearer " + \
-                 TOKEN, "Notion-Version": "2021-05-13"},
-        data={
-            "parent": {
-                "database_id": "48f8fee9cd794180bc2fec0398253067"},
-            "properties": {
-                "Name": {
-                    "title": [
-                        {
-                            "text": {
-                                "content": "Tuscan Kale"
-                            }
-                        }
-                    ]
-                },
-                "Description": {
-                    "rich_text": [
-                        {
-                            "text": {
-                                "content": "A dark green leafy vegetable"
-                            }
-                        }
-                    ]
-                },
-                "Food group": {
-                    "select": {
-                        "name": "Vegetable"
-                    }
-                },
-                "Price": {
-                    "number": 2.5
+def create_database(databaseName):
+    body = {
+        "parent": {
+            "type": "page_id",
+            "page_id": "024521c1-5030-4a91-ab71-1de6d5cbf20a"
+        },
+        "title": [
+            {
+                "type": "text",
+                "text": {
+                    "content": databaseName,
                 }
+            }
+        ],
+        "properties": {
+            "Page": {
+                "title": [{"type": "text", "text": {"content": "滴滴快车"}}]
             },
-            "children": [
-                {
-                    "object": "block",
-                    "type": "heading_2",
-                    "heading_2": {
-                        "text": [
-                            {
-                                "type": "text",
-                                "text": {
-                                    "content": "Lacinato kale"
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    "object": "block",
-                    "type": "paragraph",
-                    "paragraph": {
-                        "text": [
-                            {
-                                "type": "text",
-                                "text": {
-                                    "content": "Lacinato kale is a variety of kale with a long tradition in Italian cuisine, especially that of Tuscany. It is also known as Tuscan kale, Italian kale, dinosaur kale, kale, flat back kale, palm tree kale, or black Tuscan palm.",
-                                    "link": {
-                                        "url": "https://en.wikipedia.org/wiki/Lacinato_kale"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
+            "Content": {
+                "rich_text": {[{"text": {"content": "支付宝"}}]}
+            }
         }
+    }
+    r = requests.request(
+        "POST",
+        "https://api.notion.com/v1/databases",  # 字符串为页面id
+        json=body,
+        headers={"Authorization": "Bearer " + TOKEN,
+                 "Notion-Version": "2021-05-13",
+                 "Content-Type": "application/json"}
     )
+    return r
+
+
+if __name__ == "__main__":
+    r = upload()
+    print(r.text)
