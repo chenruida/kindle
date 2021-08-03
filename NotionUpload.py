@@ -4,32 +4,30 @@ import requests
 TOKEN = 'secret_GbMfRy93ceKE02ZMlKkVeIfefiSlJDaP1pGq8Ie3Wgt'
 
 
-def create_database(databaseName):
+def up_databases(title, author, page, text):
     body = {
         "parent": {
-            "type": "page_id",
-            "page_id": "024521c1-5030-4a91-ab71-1de6d5cbf20a"
+            "type": "database_id",
+            "database_id": "681a5248-72c2-45b4-9ff6-332c7dda4f4c"
         },
         "title": [
             {
                 "type": "text",
                 "text": {
-                    "content": databaseName,
+                    "content": "书摘",
                 }
             }
         ],
         "properties": {
-            "Page": {
-                "title": [{"type": "text", "text": {"content": "滴滴快车"}}]
-            },
-            "Content": {
-                "rich_text": {[{"text": {"content": "支付宝"}}]}
-            }
+            "标题": {"title": [{"type": "text", "text": {"content": title}}]},
+            "页码": {"rich_text": [{"type": "text", "text": {"content": page}}]},
+            "作者": {"rich_text": [{"type": "text", "text": {"content": author}}]},
+            "内容": {"rich_text": [{"type": "text", "text": {"content": text}}]},
         }
     }
     r = requests.request(
         "POST",
-        "https://api.notion.com/v1/databases",  # 字符串为页面id
+        "https://api.notion.com/v1/pages",  # 字符串为页面id
         json=body,
         headers={"Authorization": "Bearer " + TOKEN,
                  "Notion-Version": "2021-05-13",
@@ -37,7 +35,3 @@ def create_database(databaseName):
     )
     return r
 
-
-if __name__ == "__main__":
-    r = upload()
-    print(r.text)

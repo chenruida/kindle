@@ -1,6 +1,4 @@
-import os
-import sys
-import pandas
+import NotionUpload as nu
 
 
 def main(f_path):
@@ -9,18 +7,7 @@ def main(f_path):
     output = []
     for highlight in clippings_list:
         title, author, page, text = parse_highlight(highlight)
-        highlight_df = pandas.DataFrame({
-            'title': title,
-            'author': author,
-            'page': page,
-            'text': text,
-        }, index=[0])
-        output.append(highlight_df)
-    output_df = pandas.concat(output, ignore_index=True)
-    output_df.dropna()
-    output_df.drop_duplicates('text','first',True)
-    titles = output_df['title'].unique()
-    print(titles.size)
+        r = nu.up_databases(title, author, page, text)
 
 
 def get_clippings_list(txt):
